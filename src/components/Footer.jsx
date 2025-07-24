@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FiInstagram, FiGithub } from "react-icons/fi";
-import { Leaf } from "lucide-react";
+import bannerImage from '../assets/logo.svg';
 
 const Footer = () => {
   return (
@@ -18,13 +18,17 @@ const Footer = () => {
             to="/"
             className="flex items-center space-x-3"
           >
-            <Leaf className="w-8 h-8 text-green-400" />
-            <span className="text-2xl font-bold text-green-400">PlantID</span>
+            <img 
+              src={bannerImage} 
+              alt="Lestar.in Logo" 
+              className="w-8 h-8"
+            />
+            <span className="text-2xl font-bold text-green-400">Lestar.in</span>
           </Link>
           <div className="text-gray-400 text-sm">
             Identifikasi tumbuhan dengan mudah dan akurat
           </div>
-          <div className="text-gray-400 text-sm">&copy; 2025 PlantID. All rights reserved.</div>
+          <div className="text-gray-400 text-sm">&copy; 2025 Lestar.in. All rights reserved.</div>
         </div>
         <div className="flex space-x-16 mt-8 md:mt-0">
           <div>

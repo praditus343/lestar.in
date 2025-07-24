@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Menu, X, Home, List, Camera } from 'lucide-react';
-import bannerImage from '../assets/logo-ruang-project.png';
+import bannerImage from '../assets/logo.svg';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,7 +29,19 @@ const Header = () => {
               alt="Plant Identifier"
               className="w-10 h-10 object-contain"
             />
-            <span className="text-2xl font-bold text-green-600">PlantID</span>
+            <span 
+              style={{
+                color: '#333D29',
+                fontFamily: 'HUMANISM-DEMO',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: '700',
+                lineHeight: '150%', /* 24px */
+                letterSpacing: '-0.48px'
+              }}
+            >
+              Lestari.in
+            </span>
           </Link>
 
           {/* Desktop Menu */}
