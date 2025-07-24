@@ -40,6 +40,62 @@ const cleanJsonResponse = (text) => {
   return cleaned;
 };
 
+// List of known Indonesian endemic plants
+const indonesianEndemicPlants = [
+  'rafflesia arnoldii',
+  'amorphophallus titanum',
+  'nepenthes rajah',
+  'nepenthes',
+  'kantong semar',
+  'bunga bangkai',
+  'bunga rafflesia',
+  'raflesia',
+  'edelweiss jawa',
+  'anggrek hitam',
+  'pohon ulin',
+  'meranti',
+  'jelutung',
+  'damar',
+  'keruing'
+];
+
+// Function to check if plant is endemic based on scientific or common name
+const checkEndemicStatus = (scientificName, commonName, origin, description) => {
+  const scientific = scientificName.toLowerCase();
+  const common = commonName.toLowerCase();
+  const originText = origin ? origin.toLowerCase() : '';
+  const descText = description ? description.toLowerCase() : '';
+  
+  // Check against known endemic plants list
+  const isInEndemicList = indonesianEndemicPlants.some(endemic => 
+    scientific.includes(endemic) || common.includes(endemic)
+  );
+  
+  // Check origin indicators
+  const hasIndonesianOrigin = originText.includes('indonesia') || 
+                             originText.includes('nusantara') ||
+                             originText.includes('sumatra') ||
+                             originText.includes('kalimantan') ||
+                             originText.includes('jawa') ||
+                             originText.includes('sulawesi') ||
+                             originText.includes('papua');
+  
+  // Check description for endemic indicators
+  const hasEndemicDescription = descText.includes('endemik') ||
+                               descText.includes('endemic') ||
+                               descText.includes('hanya ditemukan di indonesia') ||
+                               descText.includes('khas indonesia');
+  
+  // Check for specific endemic genera
+  const isEndemicGenus = scientific.includes('rafflesia') ||
+                        scientific.includes('amorphophallus') ||
+                        scientific.includes('nepenthes') ||
+                        common.includes('kantong semar') ||
+                        common.includes('bunga bangkai');
+  
+  return isInEndemicList || isEndemicGenus || (hasIndonesianOrigin && hasEndemicDescription);
+};
+
 // Function to identify plant using Gemini
 export const identifyPlant = async (imageFile) => {
   try {
@@ -53,24 +109,38 @@ export const identifyPlant = async (imageFile) => {
     const prompt = `
     Analisis gambar tumbuhan ini dan berikan informasi berikut dalam format JSON yang valid.
     
-    PENTING: Berikan HANYA JSON yang valid tanpa markdown formatting, tanpa backticks, tanpa kata "json", tanpa teks tambahan.
+    PENTING: 
+    - Berikan HANYA JSON yang valid tanpa markdown formatting, tanpa backticks, tanpa kata "json", tanpa teks tambahan.
+    - Identifikasi tumbuhan dengan akurat termasuk nama ilmiah yang tepat
+    - Berikan informasi lengkap tentang asal dan persebaran tumbuhan
     
     Format yang diinginkan:
     {
       "name": "nama umum tumbuhan dalam bahasa Indonesia",
-      "scientificName": "nama ilmiah tumbuhan",
+      "scientificName": "nama ilmiah tumbuhan yang tepat",
       "confidence": angka_kepercayaan_0_sampai_100,
-      "description": "deskripsi singkat tentang tumbuhan ini",
+      "description": "deskripsi detail tentang tumbuhan ini, termasuk ciri khas dan keunikannya",
       "characteristics": ["karakteristik1", "karakteristik2", "karakteristik3"],
       "family": "familia tumbuhan",
       "habitat": "habitat alami tumbuhan",
+      "origin": "asal tumbuhan (sebutkan negara/wilayah spesifik)",
+      "endemicStatus": "status endemik - akan divalidasi sistem",
+      "distribution": "persebaran geografis tumbuhan ini secara detail",
       "uses": ["kegunaan1", "kegunaan2"],
       "careInstructions": "instruksi perawatan singkat",
       "isEdible": true/false,
-      "isDecorative": true/false
+      "isDecorative": true/false,
+      "conservationStatus": "status konservasi (jika ada)"
     }
     
-    Jika gambar tidak menunjukkan tumbuhan yang jelas, set confidence di bawah 50 dan berikan penjelasan di description.
+    Contoh tanaman endemik Indonesia yang harus dikenali:
+    - Rafflesia arnoldii (Bunga Rafflesia)
+    - Amorphophallus titanum (Bunga Bangkai)
+    - Nepenthes species (Kantong Semar)
+    - Anggrek Hitam (Coelogyne pandurata)
+    - Edelweiss Jawa (Anaphalis javanica)
+    
+    Berikan informasi yang akurat dan detail.
     Respon harus dimulai langsung dengan { dan diakhiri dengan }.
     `;
 
@@ -100,6 +170,30 @@ export const identifyPlant = async (imageFile) => {
         throw new Error('Response tidak memiliki field yang diperlukan');
       }
       
+      // ENHANCED: Check endemic status using multiple criteria
+      const isEndemic = checkEndemicStatus(
+        jsonResponse.scientificName,
+        jsonResponse.name,
+        jsonResponse.origin,
+        jsonResponse.description
+      );
+      
+      if (isEndemic) {
+        jsonResponse.endemicStatus = 'Tanaman endemik';
+        console.log('✅ ENDEMIC DETECTED:', jsonResponse.name, '-', jsonResponse.scientificName);
+      } else {
+        jsonResponse.endemicStatus = 'Bukan tanaman endemik';
+        console.log('❌ NOT ENDEMIC:', jsonResponse.name, '-', jsonResponse.scientificName);
+      }
+      
+      console.log('Final endemic status:', jsonResponse.endemicStatus);
+      console.log('Analysis details:', {
+        scientific: jsonResponse.scientificName,
+        common: jsonResponse.name,
+        origin: jsonResponse.origin,
+        isEndemic: isEndemic
+      });
+      
       return {
         success: true,
         data: jsonResponse
@@ -114,6 +208,21 @@ export const identifyPlant = async (imageFile) => {
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
           const extractedJson = JSON.parse(jsonMatch[0]);
+          
+          // Apply same endemic status check for fallback
+          const isEndemic = checkEndemicStatus(
+            extractedJson.scientificName || '',
+            extractedJson.name || '',
+            extractedJson.origin || '',
+            extractedJson.description || ''
+          );
+          
+          if (isEndemic) {
+            extractedJson.endemicStatus = 'Tanaman endemik';
+          } else {
+            extractedJson.endemicStatus = 'Bukan tanaman endemik';
+          }
+          
           return {
             success: true,
             data: extractedJson
@@ -160,7 +269,9 @@ export const getPlantCareTips = async (plantName) => {
       "fertilizer": "panduan pemupukan",
       "pruning": "panduan pemangkasan",
       "commonProblems": ["masalah1", "masalah2"],
-      "tips": ["tip1", "tip2", "tip3"]
+      "tips": ["tip1", "tip2", "tip3"],
+      "seasonalCare": "perawatan berdasarkan musim",
+      "propagation": "cara perbanyakan"
     }
     
     Berikan response dalam bahasa Indonesia.
