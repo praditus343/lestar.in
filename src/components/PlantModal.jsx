@@ -1,8 +1,45 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MapPin, Leaf, Heart, Info, Star } from 'lucide-react';
+import { X, MapPin, Leaf, Heart, Info, Star, Shield } from 'lucide-react';
 
 const PlantModal = ({ plant, isOpen, onClose }) => {
   if (!plant) return null;
+
+  const getConservationStatusInfo = (status) => {
+    const statusMap = {
+      'EN': { 
+        label: 'Endangered', 
+        color: 'bg-red-100 text-red-800 border-red-200',
+        description: 'Species facing a very high risk of extinction'
+      },
+      'VU': { 
+        label: 'Vulnerable', 
+        color: 'bg-orange-100 text-orange-800 border-orange-200',
+        description: 'Species facing a high risk of extinction'
+      },
+      'CR': { 
+        label: 'Critically Endangered', 
+        color: 'bg-red-200 text-red-900 border-red-300',
+        description: 'Species facing an extremely high risk of extinction'
+      },
+      'LC': { 
+        label: 'Least Concern', 
+        color: 'bg-green-100 text-green-800 border-green-200',
+        description: 'Species with stable populations'
+      },
+      'NT': { 
+        label: 'Near Threatened', 
+        color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+        description: 'Species close to qualifying for threatened status'
+      }
+    };
+    return statusMap[status] || { 
+      label: status, 
+      color: 'bg-gray-100 text-gray-800 border-gray-200',
+      description: 'Conservation status information not available'
+    };
+  };
+
+  const conservationInfo = getConservationStatusInfo(plant.conservationStatus);
 
   return (
     <AnimatePresence>
@@ -53,9 +90,12 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                       {/* Main Image with clean styling */}
                       <div className="w-80 h-80 rounded-3xl overflow-hidden shadow-lg border border-gray-100">
                         <img
-                          src={plant.image}
+                          src={plant.imageUrl}
                           alt={plant.name}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop&crop=center';
+                          }}
                         />
                       </div>
                       
@@ -97,7 +137,7 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                   {/* Two Column Layout for other info */}
                   <div className="grid md:grid-cols-2 gap-8">
                     
-                    {/* Characteristics */}
+                    {/* Region & Habitat */}
                     <motion.div
                       initial={{ opacity: 0, x: -30 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -106,26 +146,23 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                     >
                       <div className="flex items-center space-x-4 mb-6">
                         <div className="bg-green-800 rounded-full p-3">
-                          <Leaf className="text-white" size={24} />
+                          <MapPin className="text-white" size={24} />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-800">Characteristics</h3>
+                        <h3 className="text-xl font-bold text-gray-800">Endemic Region</h3>
                       </div>
-                      <div className="flex flex-wrap gap-3">
-                        {plant.characteristics.slice(0, 4).map((char, index) => (
-                          <motion.span
-                            key={index}
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
-                            className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold border border-green-200"
-                          >
-                            {char}
-                          </motion.span>
-                        ))}
+                      <div className="space-y-4">
+                        <div>
+                          <span className="bg-green-800 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                            {plant.region}
+                          </span>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed">
+                          This plant is endemic to {plant.region}, Indonesia. Found in tropical rainforests and unique ecosystems of this region.
+                        </p>
                       </div>
                     </motion.div>
 
-                    {/* Habitat */}
+                    {/* Conservation Status */}
                     <motion.div
                       initial={{ opacity: 0, x: 30 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -134,17 +171,20 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                     >
                       <div className="flex items-center space-x-4 mb-6">
                         <div className="bg-green-800 rounded-full p-3">
-                          <MapPin className="text-white" size={24} />
+                          <Shield className="text-white" size={24} />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-800">Habitat</h3>
+                        <h3 className="text-xl font-bold text-gray-800">Conservation Status</h3>
                       </div>
-                      <p className="text-gray-600 leading-relaxed">
-                        {plant.habitat}
-                      </p>
+                      <div className="space-y-4">
+                        <div className={`p-4 rounded-xl border ${conservationInfo.color}`}>
+                          <div className="font-semibold mb-2">{conservationInfo.label}</div>
+                          <p className="text-sm">{conservationInfo.description}</p>
+                        </div>
+                      </div>
                     </motion.div>
                   </div>
 
-                  {/* Uses Card */}
+                  {/* Benefits & Uses Card */}
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -155,10 +195,10 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                       <div className="bg-green-800 rounded-full p-3">
                         <Heart className="text-white" size={24} />
                       </div>
-                      <h3 className="text-2xl font-bold text-gray-800">Uses & Benefits</h3>
+                      <h3 className="text-2xl font-bold text-gray-800">Benefits & Uses</h3>
                     </div>
                     <div className="grid md:grid-cols-2 gap-4">
-                      {plant.uses.slice(0, 4).map((use, index) => (
+                      {plant.benefits.map((benefit, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, x: -20 }}
@@ -167,11 +207,44 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                           className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl"
                         >
                           <div className="w-2 h-2 bg-green-800 rounded-full flex-shrink-0"></div>
-                          <span className="text-gray-700">{use}</span>
+                          <span className="text-gray-700">{benefit}</span>
                         </motion.div>
                       ))}
                     </div>
                   </motion.div>
+
+                  {/* Plant Information Summary - 2 columns only */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8, duration: 0.4 }}
+                      className="bg-blue-50 border border-blue-200 rounded-2xl p-6"
+                    >
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                          <Leaf className="text-blue-600" size={20} />
+                        </div>
+                        <h4 className="font-semibold text-blue-800">Scientific Name</h4>
+                      </div>
+                      <p className="text-blue-700 italic font-medium">{plant.scientificName}</p>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.9, duration: 0.4 }}
+                      className="bg-green-50 border border-green-200 rounded-2xl p-6"
+                    >
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                          <MapPin className="text-green-600" size={20} />
+                        </div>
+                        <h4 className="font-semibold text-green-800">Endemic Region</h4>
+                      </div>
+                      <p className="text-green-700 font-medium">{plant.region}, Indonesia</p>
+                    </motion.div>
+                  </div>
 
                   {/* Bottom Action Section */}
                   <motion.div
@@ -184,13 +257,13 @@ const PlantModal = ({ plant, isOpen, onClose }) => {
                       <div className="flex items-center space-x-6">
                         <div className="bg-green-800 text-white px-6 py-3 rounded-full">
                           <span className="font-semibold">
-                            {plant.category.charAt(0).toUpperCase() + plant.category.slice(1)}
+                            Endemic Plant of Indonesia
                           </span>
                         </div>
                         
                         <div className="flex items-center space-x-2 text-green-800">
                           <Star size={20} />
-                          <span className="font-semibold">Verified Plant</span>
+                          <span className="font-semibold">Verified Species</span>
                         </div>
                       </div>
                       
