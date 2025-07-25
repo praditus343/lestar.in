@@ -40,7 +40,7 @@ const Header = () => {
                 letterSpacing: '-0.48px'
               }}
             >
-              Lestari.in
+              Lestar.in
             </span>
           </Link>
 

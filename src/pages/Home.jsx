@@ -19,7 +19,7 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             className="space-y-4 text-center lg:text-left relative z-20 order-1 lg:order-1"
           >
-            <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl">LESTARI.IN</h1>
+            <h1 className="text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl">LESTAR.IN</h1>
             <p className="text-sm text-gray-600 max-w-md mx-auto lg:mx-0 sm:text-base">
               Discover and learn about various plant species with artificial intelligence technology. Take photos, get complete information, and expand your botanical knowledge.
             </p>
