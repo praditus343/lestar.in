@@ -235,7 +235,7 @@ const Scan = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section with organic background */}
-      <section className="relative bg-gradient-to-br from-green-50/40 to-white py-16 sm:py-20 lg:py-24">
+      <section className="relative bg-gradient-to-br from-green-50/40 to-white py-12 sm:py-16 lg:py-20">
         <div className="absolute top-0 right-0 w-96 h-96 bg-green-100/60 rounded-full -translate-y-32 translate-x-32 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-100/40 rounded-full translate-y-32 -translate-x-32 blur-3xl"></div>
         
@@ -245,7 +245,7 @@ const Scan = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-8"
           >          
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-6">
               Scan Plants
@@ -259,7 +259,7 @@ const Scan = () => {
       </section>
 
       {/* Main Content */}
-      <section className="py-12 sm:py-16 lg:py-20">
+      <section className="py-8 sm:py-12 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
 
         {/* Camera Modal */}
