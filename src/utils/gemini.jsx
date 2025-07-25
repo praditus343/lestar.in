@@ -95,53 +95,52 @@ const checkEndemicStatus = (scientificName, commonName, origin, description) => 
   
   return isInEndemicList || isEndemicGenus || (hasIndonesianOrigin && hasEndemicDescription);
 };
-
 // Function to identify plant using Gemini
 export const identifyPlant = async (imageFile) => {
   try {
     if (!API_KEY) {
-      throw new Error('Gemini API key tidak ditemukan. Pastikan VITE_GEMINI_API_KEY sudah diset di .env file.');
+      throw new Error('Gemini API key not found. Make sure VITE_GEMINI_API_KEY is set in the .env file.');
     }
 
     // Convert image to base64
     const base64Image = await fileToBase64(imageFile);
     
     const prompt = `
-    Analisis gambar tumbuhan ini dan berikan informasi berikut dalam format JSON yang valid.
+    Analyze this plant image and provide the following information in valid JSON format.
     
-    PENTING: 
-    - Berikan HANYA JSON yang valid tanpa markdown formatting, tanpa backticks, tanpa kata "json", tanpa teks tambahan.
-    - Identifikasi tumbuhan dengan akurat termasuk nama ilmiah yang tepat
-    - Berikan informasi lengkap tentang asal dan persebaran tumbuhan
+    IMPORTANT: 
+    - Provide ONLY valid JSON without markdown formatting, without backticks, without the word "json", without additional text.
+    - Identify the plant accurately including the correct scientific name
+    - Provide complete information about the plant's origin and distribution
     
-    Format yang diinginkan:
+    Desired format:
     {
-      "name": "nama umum tumbuhan dalam bahasa Indonesia",
-      "scientificName": "nama ilmiah tumbuhan yang tepat",
-      "confidence": angka_kepercayaan_0_sampai_100,
-      "description": "deskripsi detail tentang tumbuhan ini, termasuk ciri khas dan keunikannya",
-      "characteristics": ["karakteristik1", "karakteristik2", "karakteristik3"],
-      "family": "familia tumbuhan",
-      "habitat": "habitat alami tumbuhan",
-      "origin": "asal tumbuhan (sebutkan negara/wilayah spesifik)",
-      "endemicStatus": "status endemik - akan divalidasi sistem",
-      "distribution": "persebaran geografis tumbuhan ini secara detail",
-      "uses": ["kegunaan1", "kegunaan2"],
-      "careInstructions": "instruksi perawatan singkat",
+      "name": "common plant name in English",
+      "scientificName": "correct scientific name of the plant",
+      "confidence": confidence_number_0_to_100,
+      "description": "detailed description of this plant, including distinctive features and uniqueness",
+      "characteristics": ["characteristic1", "characteristic2", "characteristic3"],
+      "family": "plant family",
+      "habitat": "natural habitat of the plant",
+      "origin": "plant origin (specify country/region)",
+      "endemicStatus": "endemic status - will be validated by system",
+      "distribution": "detailed geographical distribution of this plant",
+      "uses": ["use1", "use2"],
+      "careInstructions": "brief care instructions",
       "isEdible": true/false,
       "isDecorative": true/false,
-      "conservationStatus": "status konservasi (jika ada)"
+      "conservationStatus": "conservation status (if any)"
     }
     
-    Contoh tanaman endemik Indonesia yang harus dikenali:
-    - Rafflesia arnoldii (Bunga Rafflesia)
-    - Amorphophallus titanum (Bunga Bangkai)
-    - Nepenthes species (Kantong Semar)
-    - Anggrek Hitam (Coelogyne pandurata)
-    - Edelweiss Jawa (Anaphalis javanica)
+    Examples of Indonesian endemic plants that should be recognized:
+    - Rafflesia arnoldii (Rafflesia Flower)
+    - Amorphophallus titanum (Corpse Flower)
+    - Nepenthes species (Pitcher Plant)
+    - Black Orchid (Coelogyne pandurata)
+    - Javanese Edelweiss (Anaphalis javanica)
     
-    Berikan informasi yang akurat dan detail.
-    Respon harus dimulai langsung dengan { dan diakhiri dengan }.
+    Provide accurate and detailed information.
+    Response must start directly with { and end with }.
     `;
 
     const imagePart = {
@@ -167,7 +166,7 @@ export const identifyPlant = async (imageFile) => {
       
       // Validate required fields
       if (!jsonResponse.name || !jsonResponse.scientificName) {
-        throw new Error('Response tidak memiliki field yang diperlukan');
+        throw new Error('Response missing required fields');
       }
       
       // ENHANCED: Check endemic status using multiple criteria
@@ -179,10 +178,10 @@ export const identifyPlant = async (imageFile) => {
       );
       
       if (isEndemic) {
-        jsonResponse.endemicStatus = 'Tanaman endemik';
+        jsonResponse.endemicStatus = 'Endemic plant';
         console.log('✅ ENDEMIC DETECTED:', jsonResponse.name, '-', jsonResponse.scientificName);
       } else {
-        jsonResponse.endemicStatus = 'Bukan tanaman endemik';
+        jsonResponse.endemicStatus = 'Not an endemic plant';
         console.log('❌ NOT ENDEMIC:', jsonResponse.name, '-', jsonResponse.scientificName);
       }
       
@@ -218,9 +217,9 @@ export const identifyPlant = async (imageFile) => {
           );
           
           if (isEndemic) {
-            extractedJson.endemicStatus = 'Tanaman endemik';
+            extractedJson.endemicStatus = 'Endemic plant';
           } else {
-            extractedJson.endemicStatus = 'Bukan tanaman endemik';
+            extractedJson.endemicStatus = 'Not an endemic plant';
           }
           
           return {
@@ -234,15 +233,30 @@ export const identifyPlant = async (imageFile) => {
       
       return {
         success: false,
-        error: 'Format response tidak valid dari AI. Silakan coba lagi.'
+        error: 'Invalid response format from AI. Please try again.'
       };
     }
     
   } catch (error) {
     console.error('Error identifying plant:', error);
+    
+    if (error.message.includes('403') || error.message.includes('API key')) {
+      return {
+        success: false,
+        error: 'Invalid API key. Please check your Gemini API configuration.'
+      };
+    }
+    
+    if (error.message.includes('network') || error.message.includes('fetch')) {
+      return {
+        success: false,
+        error: 'Network error. Please check your internet connection and try again.'
+      };
+    }
+    
     return {
       success: false,
-      error: error.message || 'Terjadi kesalahan saat mengidentifikasi tumbuhan'
+      error: error.message || 'An error occurred while identifying the plant'
     };
   }
 };
@@ -251,31 +265,31 @@ export const identifyPlant = async (imageFile) => {
 export const getPlantCareTips = async (plantName) => {
   try {
     if (!API_KEY) {
-      throw new Error('Gemini API key tidak ditemukan.');
+      throw new Error('Gemini API key not found.');
     }
 
     const prompt = `
-    Berikan tips perawatan detail untuk tumbuhan "${plantName}".
+    Provide detailed care tips for the plant "${plantName}".
     
-    PENTING: Berikan HANYA JSON yang valid tanpa markdown formatting, tanpa backticks, tanpa kata "json".
+    IMPORTANT: Provide ONLY valid JSON without markdown formatting, without backticks, without the word "json".
     
-    Format yang diinginkan:
+    Desired format:
     {
-      "watering": "panduan penyiraman",
-      "sunlight": "kebutuhan cahaya matahari",
-      "soil": "jenis tanah yang cocok",
-      "temperature": "suhu optimal",
-      "humidity": "kelembaban yang dibutuhkan",
-      "fertilizer": "panduan pemupukan",
-      "pruning": "panduan pemangkasan",
-      "commonProblems": ["masalah1", "masalah2"],
+      "watering": "watering guidelines",
+      "sunlight": "sunlight requirements",
+      "soil": "suitable soil type",
+      "temperature": "optimal temperature",
+      "humidity": "required humidity",
+      "fertilizer": "fertilizing guidelines",
+      "pruning": "pruning guidelines",
+      "commonProblems": ["problem1", "problem2"],
       "tips": ["tip1", "tip2", "tip3"],
-      "seasonalCare": "perawatan berdasarkan musim",
-      "propagation": "cara perbanyakan"
+      "seasonalCare": "seasonal care requirements",
+      "propagation": "propagation methods"
     }
     
-    Berikan response dalam bahasa Indonesia.
-    Respon harus dimulai langsung dengan { dan diakhiri dengan }.
+    Provide response in English.
+    Response must start directly with { and end with }.
     `;
 
     const result = await model.generateContent(prompt);
@@ -313,15 +327,30 @@ export const getPlantCareTips = async (plantName) => {
       
       return {
         success: false,
-        error: 'Format response tidak valid untuk tips perawatan'
+        error: 'Invalid response format for care tips'
       };
     }
     
   } catch (error) {
     console.error('Error getting care tips:', error);
+    
+    if (error.message.includes('403') || error.message.includes('API key')) {
+      return {
+        success: false,
+        error: 'Invalid API key. Please check your Gemini API configuration.'
+      };
+    }
+    
+    if (error.message.includes('network') || error.message.includes('fetch')) {
+      return {
+        success: false,
+        error: 'Network error. Please check your internet connection and try again.'
+      };
+    }
+    
     return {
       success: false,
-      error: error.message || 'Terjadi kesalahan saat mengambil tips perawatan'
+      error: error.message || 'An error occurred while getting care tips'
     };
   }
 };

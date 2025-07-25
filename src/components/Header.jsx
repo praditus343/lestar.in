@@ -8,9 +8,9 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
-    { name: 'Beranda', path: '/', icon: Home },
-    { name: 'List Tumbuhan', path: '/plants', icon: List },
-    { name: 'Scan Tumbuhan', path: '/scan', icon: Camera },
+    { name: 'Home', path: '/', icon: Home },
+    { name: 'Plant List', path: '/plants', icon: List },
+    { name: 'Scan Plants', path: '/scan', icon: Camera },
   ];
 
   return (

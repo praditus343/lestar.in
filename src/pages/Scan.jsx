@@ -35,7 +35,7 @@ const Scan = () => {
       };
       reader.readAsDataURL(file);
     } else {
-      setError('Silakan pilih file gambar yang valid (JPG, PNG, WEBP)');
+      setError('Please select a valid image file (JPG, PNG, WEBP)');
     }
   };
 
@@ -90,16 +90,16 @@ const Scan = () => {
       
     } catch (err) {
       console.error('Error accessing camera:', err);
-      let errorMessage = 'Tidak dapat mengakses kamera. ';
+      let errorMessage = 'Cannot access camera. ';
       
       if (err.name === 'NotAllowedError') {
-        errorMessage += 'Silakan berikan izin akses kamera di browser Anda.';
+        errorMessage += 'Please grant camera access permission in your browser.';
       } else if (err.name === 'NotFoundError') {
-        errorMessage += 'Kamera tidak ditemukan di perangkat Anda.';
+        errorMessage += 'Camera not found on your device.';
       } else if (err.name === 'NotSupportedError') {
-        errorMessage += 'Browser Anda tidak mendukung akses kamera.';
+        errorMessage += 'Your browser does not support camera access.';
       } else {
-        errorMessage += 'Terjadi kesalahan teknis.';
+        errorMessage += 'A technical error occurred.';
       }
       
       setCameraError(errorMessage);
@@ -178,7 +178,7 @@ const Scan = () => {
       }
     } catch (err) {
       console.error('Scan error:', err);
-      setError('Terjadi kesalahan saat mengidentifikasi tumbuhan. Silakan coba lagi.');
+      setError('An error occurred while identifying the plant. Please try again.');
     } finally {
       setIsScanning(false);
     }
@@ -200,11 +200,11 @@ const Scan = () => {
         setShowCareTips(true);
       } else {
         console.error('Failed to load care tips:', result.error);
-        setError('Gagal memuat tips perawatan: ' + result.error);
+        setError('Failed to load care tips: ' + result.error);
       }
     } catch (err) {
       console.error('Care tips error:', err);
-      setError('Terjadi kesalahan saat memuat tips perawatan');
+      setError('An error occurred while loading care tips');
     } finally {
       setLoadingTips(false);
     }
@@ -241,12 +241,12 @@ const Scan = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
-        >
+        >          
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Identifikasi Tumbuhan AI
+            AI Plant Identification
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Upload foto tumbuhan dan biarkan AI Gemini mengidentifikasi jenis, karakteristik, dan memberikan tips perawatan
+            Upload a plant photo and let Gemini AI identify the species, characteristics, and provide care tips
           </p>
         </motion.div>
 
@@ -259,7 +259,7 @@ const Scan = () => {
           >
             <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-full overflow-auto">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-gray-800">Ambil Foto Tumbuhan</h3>
+                <h3 className="text-xl font-bold text-gray-800">Take Plant Photo</h3>
                 <button
                   onClick={stopCamera}
                   className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -276,7 +276,7 @@ const Scan = () => {
                     onClick={stopCamera}
                     className="bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition-colors"
                   >
-                    Tutup
+                    Close
                   </button>
                 </div>
               ) : (
@@ -292,7 +292,7 @@ const Scan = () => {
                     <div className="absolute inset-0 border-2 border-dashed border-white border-opacity-50 m-4 rounded-lg flex items-center justify-center">
                       <div className="text-white text-center">
                         <Camera className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                        <p className="text-sm opacity-75">Posisikan tumbuhan di dalam frame</p>
+                        <p className="text-sm opacity-75">Position the plant within the frame</p>
                       </div>
                     </div>
                   </div>
@@ -303,13 +303,13 @@ const Scan = () => {
                       className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2"
                     >
                       <Camera size={20} />
-                      <span>Ambil Foto</span>
+                      <span>Take Photo</span>
                     </button>
                     <button
                       onClick={stopCamera}
                       className="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors"
                     >
-                      Batal
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -349,17 +349,17 @@ const Scan = () => {
                     alt="Selected plant"
                     className="w-full h-64 object-cover rounded-lg mx-auto"
                   />
-                  <p className="text-green-600 font-medium">Foto siap untuk dianalisis!</p>
+                  <p className="text-green-600 font-medium">Photo ready for analysis!</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <Upload className="w-16 h-16 text-gray-400 mx-auto" />
                   <div>
                     <p className="text-lg font-medium text-gray-700 mb-2">
-                      Drop foto di sini atau klik untuk upload
+                      Drop photo here or click to upload
                     </p>
                     <p className="text-gray-500">
-                      Mendukung JPG, PNG, atau WEBP (max 10MB)
+                      Supports JPG, PNG, or WEBP (max 10MB)
                     </p>
                   </div>
                 </div>
@@ -392,14 +392,14 @@ const Scan = () => {
                 className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <Upload size={20} />
-                <span>Upload Foto</span>
+                <span>Upload Photo</span>
               </button>
               <button
                 onClick={startCamera}
                 className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <Camera size={20} />
-                <span>Ambil Foto</span>
+                <span>Take Photo</span>
               </button>
             </div>
 
@@ -418,12 +418,12 @@ const Scan = () => {
                   {isScanning ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                      <span>AI sedang menganalisis...</span>
+                      <span>AI is analyzing...</span>
                     </>
                   ) : (
                     <>
                       <Search size={20} />
-                      <span>Analisis dengan AI Gemini</span>
+                      <span>Analyze with Gemini AI</span>
                     </>
                   )}
                 </button>
@@ -448,14 +448,14 @@ const Scan = () => {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center space-x-2">
                 <Search className="text-green-600" size={20} />
-                <span>Hasil Identifikasi AI</span>
+                <span>AI Identification Results</span>
               </h3>
 
               {!selectedImage && !scanResult && !isScanning && (
                 <div className="text-center py-12">
                   <Leaf className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <p className="text-gray-500">
-                    Upload foto tumbuhan untuk memulai identifikasi AI
+                    Upload a plant photo to start AI identification
                   </p>
                   <p className="text-sm text-gray-400 mt-2">
                     Powered by Google Gemini AI
@@ -467,10 +467,10 @@ const Scan = () => {
                 <div className="text-center py-12">
                   <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-500 border-t-transparent mx-auto mb-4"></div>
                   <p className="text-gray-600 font-medium">
-                    AI Gemini sedang menganalisis foto...
+                    Gemini AI is analyzing the photo...
                   </p>
                   <p className="text-sm text-gray-500 mt-2">
-                    Proses analisis membutuhkan beberapa detik
+                    Analysis process takes a few seconds
                   </p>
                 </div>
               )}
@@ -482,19 +482,21 @@ const Scan = () => {
                   className="space-y-4"
                 >
                   {/* Success Header */}
-                  <div className="flex items-center space-x-2 text-green-600 mb-4">
-                    <CheckCircle size={20} />
-                    <span className="font-medium">Identifikasi Berhasil!</span>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-2 text-green-600">
+                      <CheckCircle size={20} />
+                      <span className="font-medium">Identification Successful!</span>
+                    </div>
                   </div>
 
-                  {/* Check if it's not endemic - show only "Bukan tumbuhan endemik" */}
-                  {scanResult.endemicStatus === 'Bukan tanaman endemik' ? (
+                  {/* Check if it's not endemic - show only "Not an endemic plant" */}
+                  {scanResult.endemicStatus === 'Not an endemic plant' ? (
                     <div className="border rounded-lg p-6 text-center">
                       <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                         <Leaf className="w-8 h-8 text-gray-400" />
                       </div>
                       <p className="text-lg text-gray-600">
-                        Bukan tumbuhan endemik
+                        Not an endemic plant
                       </p>
                     </div>
                   ) : (
@@ -520,13 +522,13 @@ const Scan = () => {
                         {/* Simplified Endemic Status Badge - Only show badge for endemic plants */}
                         {scanResult.endemicStatus && (
                           <div className="mt-2">
-                            {scanResult.endemicStatus === 'Tanaman endemik' ? (
+                            {scanResult.endemicStatus === 'Endemic plant' ? (
                               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                                � Tanaman endemik
+                                � Endemic plant
                               </span>
                             ) : (
                               <p className="text-sm text-gray-600 mt-1">
-                                Bukan tanaman endemik
+                                Not an endemic plant
                               </p>
                             )}
                           </div>
@@ -565,17 +567,17 @@ const Scan = () => {
                         <p className="text-gray-600">{scanResult.habitat}</p>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Asal:</span>
-                        <p className="text-gray-600">{scanResult.origin || 'Tidak diketahui'}</p>
+                        <span className="font-medium text-gray-700">Origin:</span>
+                        <p className="text-gray-600">{scanResult.origin || 'Unknown'}</p>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Persebaran:</span>
-                        <p className="text-gray-600">{scanResult.distribution || 'Tidak diketahui'}</p>
+                        <span className="font-medium text-gray-700">Distribution:</span>
+                        <p className="text-gray-600">{scanResult.distribution || 'Unknown'}</p>
                       </div>
                       <div>
-                        <span className="font-medium text-gray-700">Dapat dimakan:</span>
+                        <span className="font-medium text-gray-700">Edible:</span>
                         <p className={`${scanResult.isEdible ? 'text-green-600' : 'text-red-600'}`}>
-                          {scanResult.isEdible ? 'Ya' : 'Tidak'}
+                          {scanResult.isEdible ? 'Yes' : 'No'}
                         </p>
                       </div>
                     </div>
@@ -584,14 +586,14 @@ const Scan = () => {
                     {scanResult.conservationStatus && (
                       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                         <div className="flex items-center space-x-2">
-                          <span className="font-medium text-yellow-800">Status Konservasi:</span>
+                          <span className="font-medium text-yellow-800">Conservation Status:</span>
                           <span className="text-yellow-700">{scanResult.conservationStatus}</span>
                         </div>
                       </div>
                     )}
 
                     <div className="space-y-2">
-                      <h5 className="font-medium text-gray-700">Karakteristik:</h5>
+                      <h5 className="font-medium text-gray-700">Characteristics:</h5>
                       <div className="flex flex-wrap gap-1">
                         {scanResult.characteristics?.map((char, index) => (
                           <span
@@ -606,7 +608,7 @@ const Scan = () => {
 
                     {scanResult.uses && scanResult.uses.length > 0 && (
                       <div className="space-y-2">
-                        <h5 className="font-medium text-gray-700">Kegunaan:</h5>
+                        <h5 className="font-medium text-gray-700">Uses:</h5>
                         <div className="flex flex-wrap gap-1">
                           {scanResult.uses.map((use, index) => (
                             <span
@@ -635,7 +637,7 @@ const Scan = () => {
                       ) : (
                         <>
                           <Heart size={18} />
-                          <span>Tips Perawatan</span>
+                          <span>Care Tips</span>
                         </>
                       )}
                     </button>
@@ -655,53 +657,53 @@ const Scan = () => {
               >
                 <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center space-x-2">
                   <Heart className="text-red-500" size={20} />
-                  <span>Tips Perawatan {scanResult?.name}</span>
+                  <span>Care Tips for {scanResult?.name}</span>
                 </h3>
 
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">💧 Penyiraman</h4>
+                      <h4 className="font-medium text-gray-700">💧 Watering</h4>
                       <p className="text-sm text-gray-600">{careTips.watering}</p>
                     </div>
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">☀️ Cahaya</h4>
+                      <h4 className="font-medium text-gray-700">☀️ Light</h4>
                       <p className="text-sm text-gray-600">{careTips.sunlight}</p>
                     </div>
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">🌱 Tanah</h4>
+                      <h4 className="font-medium text-gray-700">🌱 Soil</h4>
                       <p className="text-sm text-gray-600">{careTips.soil}</p>
                     </div>
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">🌡️ Suhu</h4>
+                      <h4 className="font-medium text-gray-700">🌡️ Temperature</h4>
                       <p className="text-sm text-gray-600">{careTips.temperature}</p>
                     </div>
                   </div>
 
                   {careTips.humidity && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">💨 Kelembaban</h4>
+                      <h4 className="font-medium text-gray-700">💨 Humidity</h4>
                       <p className="text-sm text-gray-600">{careTips.humidity}</p>
                     </div>
                   )}
 
                   {careTips.fertilizer && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">🌿 Pemupukan</h4>
+                      <h4 className="font-medium text-gray-700">🌿 Fertilizing</h4>
                       <p className="text-sm text-gray-600">{careTips.fertilizer}</p>
                     </div>
                   )}
 
                   {careTips.pruning && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">✂️ Pemangkasan</h4>
+                      <h4 className="font-medium text-gray-700">✂️ Pruning</h4>
                       <p className="text-sm text-gray-600">{careTips.pruning}</p>
                     </div>
                   )}
 
                   {careTips.commonProblems && careTips.commonProblems.length > 0 && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">⚠️ Masalah Umum</h4>
+                      <h4 className="font-medium text-gray-700">⚠️ Common Problems</h4>
                       <ul className="text-sm text-gray-600 space-y-1">
                         {careTips.commonProblems.map((problem, index) => (
                           <li key={index} className="flex items-start space-x-2">
@@ -715,7 +717,7 @@ const Scan = () => {
 
                   {careTips.tips && careTips.tips.length > 0 && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">💡 Tips Tambahan</h4>
+                      <h4 className="font-medium text-gray-700">💡 Additional Tips</h4>
                       <ul className="text-sm text-gray-600 space-y-1">
                         {careTips.tips.map((tip, index) => (
                           <li key={index} className="flex items-start space-x-2">
@@ -729,14 +731,14 @@ const Scan = () => {
 
                   {careTips.seasonalCare && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">🗓️ Perawatan Musiman</h4>
+                      <h4 className="font-medium text-gray-700">🗓️ Seasonal Care</h4>
                       <p className="text-sm text-gray-600">{careTips.seasonalCare}</p>
                     </div>
                   )}
 
                   {careTips.propagation && (
                     <div className="space-y-2">
-                      <h4 className="font-medium text-gray-700">🌱 Perbanyakan</h4>
+                      <h4 className="font-medium text-gray-700">🌱 Propagation</h4>
                       <p className="text-sm text-gray-600">{careTips.propagation}</p>
                     </div>
                   )}
@@ -748,15 +750,15 @@ const Scan = () => {
             <div className="bg-blue-50 rounded-lg p-6">
               <h4 className="font-bold text-blue-800 mb-3 flex items-center space-x-2">
                 <Info size={18} />
-                <span>Tips untuk Hasil Terbaik</span>
+                <span>Tips for Best Results</span>
               </h4>
               <ul className="space-y-2 text-blue-700 text-sm">
-                <li>• Ambil foto dengan pencahayaan yang baik</li>
-                <li>• Pastikan tumbuhan terlihat jelas dan fokus</li>
-                <li>• Sertakan daun, bunga, atau bagian karakteristik</li>
-                <li>• Hindari foto yang blur atau terlalu gelap</li>
-                <li>• Foto close-up memberikan hasil yang lebih akurat</li>
-                <li>• Ambil dari beberapa sudut untuk hasil optimal</li>
+                <li>• Take photos with good lighting</li>
+                <li>• Make sure the plant is clearly visible and in focus</li>
+                <li>• Include leaves, flowers, or characteristic parts</li>
+                <li>• Avoid blurry or too dark photos</li>
+                <li>• Close-up photos provide more accurate results</li>
+                <li>• Take from multiple angles for optimal results</li>
               </ul>
             </div>
           </motion.div>

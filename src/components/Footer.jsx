@@ -26,18 +26,18 @@ const Footer = () => {
             <span className="text-2xl font-bold text-green-400">Lestar.in</span>
           </Link>
           <div className="text-gray-400 text-sm">
-            Identifikasi tumbuhan dengan mudah dan akurat
+            Identify plants easily and accurately
           </div>
           <div className="text-gray-400 text-sm">&copy; 2025 Lestar.in. All rights reserved.</div>
         </div>
         <div className="flex space-x-16 mt-8 md:mt-0">
           <div>
-            <h3 className="text-lg font-medium mb-4">Navigasi</h3>
+            <h3 className="text-lg font-medium mb-4">Navigation</h3>
             <ul className="space-y-2">
               {[
-                { path: "/", name: "Beranda" }, 
-                { path: "/plants", name: "List Tumbuhan" }, 
-                { path: "/scan", name: "Scan Tumbuhan" }
+                { path: "/", name: "Home" }, 
+                { path: "/plants", name: "Plant List" }, 
+                { path: "/scan", name: "Scan Plants" }
               ].map((item, idx) => (
                 <li key={idx}>
                   <Link
@@ -51,7 +51,7 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-medium mb-4">Sosial Media</h3>
+            <h3 className="text-lg font-medium mb-4">Social Media</h3>
             <ul className="space-y-2">
               <li>
                 <a

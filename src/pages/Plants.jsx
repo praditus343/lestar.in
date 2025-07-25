@@ -8,40 +8,40 @@ const Plants = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedPlant, setSelectedPlant] = useState(null);
 
-  // Data dummy tumbuhan
+  // Plant data dummy
   const plantsData = [
     {
       id: 1,
-      name: 'Mawar Merah',
+      name: 'Red Rose',
       scientificName: 'Rosa rubiginosa',
-      category: 'bunga',
+      category: 'flower',
       image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400',
-      description: 'Mawar merah adalah simbol cinta dan kasih sayang. Bunga ini memiliki aroma yang harum dan kelopak yang indah.',
-      characteristics: ['Berduri', 'Harum', 'Berbunga sepanjang tahun'],
-      habitat: 'Taman, kebun, daerah beriklim sedang',
-      uses: ['Dekorasi', 'Parfum', 'Obat tradisional']
+      description: 'Red rose is a symbol of love and affection. This flower has a fragrant aroma and beautiful petals.',
+      characteristics: ['Thorny', 'Fragrant', 'Blooms year-round'],
+      habitat: 'Gardens, parks, temperate climate areas',
+      uses: ['Decoration', 'Perfume', 'Traditional medicine']
     },
     {
       id: 2,
       name: 'Monstera Deliciosa',
       scientificName: 'Monstera deliciosa',
-      category: 'hias',
+      category: 'ornamental',
       image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
-      description: 'Tanaman hias populer dengan daun berlubang yang unik. Mudah dirawat dan cocok untuk interior.',
-      characteristics: ['Daun berlubang', 'Merambat', 'Tahan naungan'],
-      habitat: 'Hutan tropis, dalam ruangan',
-      uses: ['Dekorasi interior', 'Pembersih udara']
+      description: 'Popular houseplant with unique fenestrated leaves. Easy to care for and perfect for interior decoration.',
+      characteristics: ['Fenestrated leaves', 'Climbing', 'Shade tolerant'],
+      habitat: 'Tropical forests, indoor spaces',
+      uses: ['Interior decoration', 'Air purifier']
     },
     {
       id: 3,
-      name: 'Lidah Buaya',
+      name: 'Aloe Vera',
       scientificName: 'Aloe vera',
-      category: 'obat',
+      category: 'medicinal',
       image: 'https://images.unsplash.com/photo-1596783074918-c84cb06531ca?w=400',
-      description: 'Tanaman sukulen dengan gel yang bermanfaat untuk kesehatan kulit dan pengobatan.',
-      characteristics: ['Sukulen', 'Berdaging tebal', 'Tahan kekeringan'],
-      habitat: 'Daerah kering, gurun',
-      uses: ['Obat luka', 'Kosmetik', 'Perawatan kulit']
+      description: 'Succulent plant with gel that is beneficial for skin health and healing.',
+      characteristics: ['Succulent', 'Thick flesh', 'Drought tolerant'],
+      habitat: 'Dry areas, deserts',
+      uses: ['Wound treatment', 'Cosmetics', 'Skin care']
     },
     {
       id: 4,
@@ -49,21 +49,21 @@ const Plants = () => {
       scientificName: 'Lavandula angustifolia',
       category: 'herbal',
       image: 'https://images.unsplash.com/photo-1571424530218-b1c5c26a7ae2?w=400',
-      description: 'Tanaman herbal dengan aroma menenangkan, sering digunakan untuk aromaterapi dan relaksasi.',
-      characteristics: ['Harum', 'Bunga ungu', 'Tahan kekeringan'],
-      habitat: 'Mediterania, daerah kering',
-      uses: ['Aromaterapi', 'Teh herbal', 'Obat penenang']
+      description: 'Herbal plant with calming aroma, often used for aromatherapy and relaxation.',
+      characteristics: ['Fragrant', 'Purple flowers', 'Drought tolerant'],
+      habitat: 'Mediterranean, dry areas',
+      uses: ['Aromatherapy', 'Herbal tea', 'Sedative medicine']
     },
     {
       id: 5,
-      name: 'Kaktus Pir Berduri',
+      name: 'Prickly Pear Cactus',
       scientificName: 'Opuntia ficus-indica',
-      category: 'sukulen',
+      category: 'succulent',
       image: 'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=400',
-      description: 'Kaktus dengan bentuk pipih seperti pir, memiliki duri dan buah yang dapat dimakan.',
-      characteristics: ['Berduri', 'Bentuk pipih', 'Berbuah'],
-      habitat: 'Gurun, daerah kering',
-      uses: ['Makanan', 'Obat tradisional', 'Dekorasi']
+      description: 'Cactus with flat pear-like shape, has spines and edible fruits.',
+      characteristics: ['Spiny', 'Flat shape', 'Bears fruit'],
+      habitat: 'Deserts, dry areas',
+      uses: ['Food', 'Traditional medicine', 'Decoration']
     },
     {
       id: 6,
@@ -71,20 +71,20 @@ const Plants = () => {
       scientificName: 'Ocimum basilicum',
       category: 'herbal',
       image: 'https://images.unsplash.com/photo-1618164435735-413d3b066c9a?w=400',
-      description: 'Tanaman herbal aromatik yang sering digunakan dalam masakan dan memiliki khasiat obat.',
-      characteristics: ['Aromatik', 'Daun hijau', 'Mudah tumbuh'],
-      habitat: 'Daerah tropis, kebun',
-      uses: ['Bumbu masakan', 'Obat tradisional', 'Teh herbal']
+      description: 'Aromatic herbal plant often used in cooking and has medicinal properties.',
+      characteristics: ['Aromatic', 'Green leaves', 'Easy to grow'],
+      habitat: 'Tropical areas, gardens',
+      uses: ['Cooking spice', 'Traditional medicine', 'Herbal tea']
     }
   ];
 
   const categories = [
-    { value: 'all', label: 'Semua' },
-    { value: 'bunga', label: 'Bunga' },
-    { value: 'hias', label: 'Tanaman Hias' },
-    { value: 'obat', label: 'Tanaman Obat' },
-    { value: 'herbal', label: 'Herbal' },
-    { value: 'sukulen', label: 'Sukulen' }
+    { value: 'all', label: 'All' },
+    { value: 'flower', label: 'Flowers' },
+    { value: 'ornamental', label: 'Ornamental Plants' },
+    { value: 'medicinal', label: 'Medicinal Plants' },
+    { value: 'herbal', label: 'Herbs' },
+    { value: 'succulent', label: 'Succulents' }
   ];
 
   const filteredPlants = plantsData.filter(plant => {
@@ -105,10 +105,10 @@ const Plants = () => {
           className="text-center mb-12"
         >
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Database Tumbuhan
+            Plant Database
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Jelajahi koleksi lengkap berbagai jenis tumbuhan dengan informasi detail
+            Explore our comprehensive collection of various plant species with detailed information
           </p>
         </motion.div>
 
@@ -119,7 +119,7 @@ const Plants = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
-                placeholder="Cari nama tumbuhan atau nama ilmiah..."
+                placeholder="Search plant name or scientific name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -145,7 +145,7 @@ const Plants = () => {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-600">
-            Menampilkan {filteredPlants.length} dari {plantsData.length} tumbuhan
+            Showing {filteredPlants.length} of {plantsData.length} plants
           </p>
         </div>
 
@@ -186,7 +186,7 @@ const Plants = () => {
                 </p>
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-green-600 font-medium text-sm">
-                    Lihat Detail
+                    View Details
                   </span>
                   <div className="flex space-x-1">
                     {plant.characteristics.slice(0, 2).map((char, idx) => (
@@ -208,7 +208,7 @@ const Plants = () => {
         {filteredPlants.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
-              Tidak ada tumbuhan yang ditemukan dengan kriteria pencarian Anda.
+              No plants found matching your search criteria.
             </p>
           </div>
         )}
